@@ -1,9 +1,6 @@
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 public class Trie {
     private Tree trie = new Tree();
@@ -29,6 +26,9 @@ public class Trie {
                 current.addChild(child);
             }
 
+            if (i == word.length() - 1 && child != null) {
+                child.setTerminal(true);
+            }
             current = child;
         }
     }
@@ -47,6 +47,33 @@ public class Trie {
 
         return current.isTerminal();
     }
+
+    void remove(String word) {
+        EntryNode current = trie.getRoot();
+        for (int i = 0; i < word.length(); i++) {
+            char character = word.charAt(i);
+            EntryNode child = current.getChild(character);
+            current = child;
+        }
+        current.setTerminal(false);
+        removeHelper(trie.getRoot(), word);
+    }
+
+    boolean removeHelper(EntryNode node, String word) {
+        boolean remove = false;
+        if (word.length() != 1) {
+            remove = removeHelper(node.getChild(word.charAt(0)), word.substring(1));
+        }
+        if(!node.isTerminal() && node.getChild(word.charAt(0)).getChildren().size() == 0) {
+            return true;
+        } else if (remove) {
+            node.getChildren().remove(word.charAt(1));
+            return false;
+        } else {
+            return false;
+        }
+    }
+
 
     public static void main(String[] args) throws FileNotFoundException {
         Scanner scan = new Scanner(new File("src/main/resources/dictionary.txt"));
@@ -76,5 +103,121 @@ public class Trie {
         System.out.println("Contains 'the': " + trie.contains("the"));
         System.out.println("Contains 'shore': " + trie.contains("shore"));
         System.out.println("Contains 'shorebird': " + trie.contains("shorebird"));
+        trie.remove("shorebird");
+        trie.printTrie();
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//    public void remove(String word) {
+//        if (!this.contains(word)) {
+//            return;
+//        }
+//        EntryNode current = trie.getRoot();
+//        EntryNode current2 = trie.getRoot();
+//        int wordsBefore = 0;
+//        int wordsPassed = 0;
+//        for (int i = 0; i < word.length(); i++) {
+//            char character = word.charAt(i);
+//
+//            EntryNode child = current.getChild(character);
+//            if (child == null) {
+//                throw new NoSuchElementException();
+//            }
+//            if(current.isTerminal()) {
+//                wordsBefore++;
+//            }
+//            if (i != word.length() - 1) {
+//                current = child;
+//            }
+//        }
+//        for (int i = 0; i < word.length(); i++) {
+//            char character = word.charAt(i);
+//            EntryNode child = current.getChild(character);
+//            if (wordsBefore != wordsPassed) {
+//                current2 = child;
+//            } else {
+//                current2.getChild(word.charAt(i)) = null;
+//            }
+//        }
+//    }
+
+
+
+
+
+
+
+
+
+
+
+
 }

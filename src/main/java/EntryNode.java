@@ -20,6 +20,9 @@ public class EntryNode {
         return children.get(data);
     }
 
+    Map<Character, EntryNode> getChildren() { return this.children; }
+
+
     void addChild(EntryNode child) {
         this.children.put(child.letter, child);
     }
