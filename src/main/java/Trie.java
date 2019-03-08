@@ -59,16 +59,18 @@ public class Trie {
         removeHelper(trie.getRoot(), word);
     }
 
-    boolean removeHelper(EntryNode node, String word) {
-        boolean remove = false;
+    private boolean removeHelper(EntryNode node, String word) {
+        boolean remove = true;
+
         if (word.length() != 1) {
             remove = removeHelper(node.getChild(word.charAt(0)), word.substring(1));
         }
-        if(!node.isTerminal() && node.getChild(word.charAt(0)).getChildren().size() == 0) {
+
+        EntryNode child = node.getChild(word.charAt(0));
+
+        if(remove && !child.isTerminal() && child.getChildren().size() == 0) {
+            node.getChildren().remove(word.charAt((0)));
             return true;
-        } else if (remove) {
-            node.getChildren().remove(word.charAt(1));
-            return false;
         } else {
             return false;
         }
@@ -104,6 +106,7 @@ public class Trie {
         System.out.println("Contains 'shore': " + trie.contains("shore"));
         System.out.println("Contains 'shorebird': " + trie.contains("shorebird"));
         trie.remove("shorebird");
+        trie.remove("sea");
         trie.printTrie();
     }
 
